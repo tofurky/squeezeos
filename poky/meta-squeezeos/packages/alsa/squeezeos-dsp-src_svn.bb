@@ -11,17 +11,9 @@ DEPENDS += "alsa-lib"
 # no thumb here thanks!
 ARM_INSTRUCTION_SET = "arm"
 
-SRC_URI="${SQUEEZEOS_PRIVATE_SVN};module=squeezeos_dsp"
+SRC_URI="http://ralph.irving.sdf.org/squeezeos/babydsp-7.7.3r16676.tar.gz;module=squeezeos_dsp"
 
 S = "${WORKDIR}/squeezeos_dsp"
-
-inherit autotools
-
-do_configure_prepend() {
-	cd ${S}/openmax
-	tar -xzf openmax-arm-98665.tgz
-	cd ${S}
-}
 
 do_install() {
 	mkdir -p ${D}/${libdir}/alsa-lib
