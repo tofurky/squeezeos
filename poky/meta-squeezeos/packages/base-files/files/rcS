@@ -93,6 +93,11 @@ if ! [ -f /etc/dropbear/dropbear_dss_host_key ]; then
 	/usr/sbin/dropbearkey -t dss -f /etc/dropbear/dropbear_dss_host_key
 fi
 
+# Create lastlog for remote login
+if ! [ -f /var/log/lastlog ]; then
+        /bin/touch /var/log/lastlog
+fi
+
 # Start network
 echo "Starting lo"
 /sbin/ifconfig lo up 127.0.0.1
