@@ -93,9 +93,13 @@ if ! [ -f /etc/dropbear/dropbear_dss_host_key ]; then
 	/usr/sbin/dropbearkey -t dss -f /etc/dropbear/dropbear_dss_host_key
 fi
 
-# Create lastlog for remote login
+# Create lastlog/wtmp for remote login
 if ! [ -f /var/log/lastlog ]; then
-        /bin/touch /var/log/lastlog
+	/bin/touch /var/log/lastlog
+fi
+
+if ! [ -f /var/log/wtmp ]; then
+	/bin/touch /var/log/wtmp
 fi
 
 # Start network
