@@ -6,6 +6,7 @@ SRC_URI = "http://www.busybox.net/downloads/busybox-${PV}.tar.bz2 \
 	   file://busybox_ifupdown_hostname.patch;patch=1 \
 	   file://busybox_udhcpd_hostname_nak.patch;patch=1 \
 	   file://busybox_udhcpd_write_pid_after_signal_pipe.patch;patch=1 \
+           file://busybox_libbb_prevent_zombie.patch;patch=1 \
            file://defconfig"
 
 S = "${WORKDIR}/busybox-${PV}"
