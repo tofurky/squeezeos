@@ -10,8 +10,8 @@ SRC_URI = "http://matt.ucc.asn.au/dropbear/releases/dropbear-${PV}.tar.gz \
 	   file://urandom-xauth-changes-to-options.h.patch;patch=1 \
 	   file://configure.patch;patch=1 \
 	   file://fix-2kb-keys.patch;patch=1 \
-	   file://allow-nopw.patch \
-	   file://init"
+	   file://allow-nopw.patch"
+#	   file://init"
 
 inherit autotools update-rc.d
 
@@ -50,12 +50,12 @@ do_install() {
 	do
 		ln -s ./dropbearmulti ${D}${sbindir}/$i
 	done
-	cat ${WORKDIR}/init | sed -e 's,/etc,${sysconfdir},g' \
-				  -e 's,/usr/sbin,${sbindir},g' \
-				  -e 's,/var,${localstatedir},g' \
-				  -e 's,/usr/bin,${bindir},g' \
-				  -e 's,/usr,${prefix},g' > ${D}${sysconfdir}/init.d/dropbear
-	chmod 755 ${D}${sysconfdir}/init.d/dropbear
+#	cat ${WORKDIR}/init | sed -e 's,/etc,${sysconfdir},g' \
+#				  -e 's,/usr/sbin,${sbindir},g' \
+#				  -e 's,/var,${localstatedir},g' \
+#				  -e 's,/usr/bin,${bindir},g' \
+#				  -e 's,/usr,${prefix},g' > ${D}${sysconfdir}/init.d/dropbear
+#	chmod 755 ${D}${sysconfdir}/init.d/dropbear
 }
 
 pkg_postinst () {
