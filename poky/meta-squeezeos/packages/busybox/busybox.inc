@@ -61,7 +61,7 @@ do_install () {
 		install -d ${D}${sbindir}
 		mv ${D}/busybox${sbindir}/crond ${D}${sbindir}/
 
-		install -m 0755 ${WORKDIR}/busybox-cron ${D}${sysconfdir}/init.d/
+		# install -m 0755 ${WORKDIR}/busybox-cron ${D}${sysconfdir}/init.d/
 	fi
 	if grep "CONFIG_HTTPD=y" ${WORKDIR}/defconfig; then
 		# Move httpd back to /usr/sbin/httpd

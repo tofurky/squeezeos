@@ -109,6 +109,9 @@ echo "Starting lo"
 echo "Starting inetd"
 /usr/sbin/inetd
 
+echo "Starting crond"
+/usr/sbin/crond
+
 # Start wlan
 /etc/init.d/wlan start
 

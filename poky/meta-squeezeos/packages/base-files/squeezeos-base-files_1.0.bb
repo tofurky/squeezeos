@@ -77,7 +77,7 @@ dirs755 = "/bin /dev ${sysconfdir} ${sysconfdir}/default \
 	   ${localstatedir}/squeezecenter \
 	   /mnt /mnt/storage /mnt/overlay /media \
 	   ${sysconfdir}/init.d ${sysconfdir}/dropbear \
-	   ${sysconfdir}/udev/rules.d"
+	   ${sysconfdir}/udev/rules.d ${sysconfdir}/cron/crontabs"
 
 
 do_install () {
