@@ -9,7 +9,7 @@ RPROVIDES = "ssh sshd"
 SRC_URI = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${PV}.tar.bz2 \
 	file://localoptions.h"
 
-PR="r2"
+PR="r3"
 
 inherit autotools
 
@@ -53,6 +53,9 @@ pkg_postrm_append () {
   fi
   if [ -f "${sysconfdir}/dropbear/dropbear_dss_host_key" ]; then
         rm ${sysconfdir}/dropbear/dropbear_dss_host_key
+  fi
+  if [ -f "${sysconfdir}/dropbear/dropbear_ecdsa_host_key" ]; then
+        rm ${sysconfdir}/dropbear/dropbear_ecdsa_host_key
   fi
   update-alternatives --remove ssh ${bindir}/dropbearmulti
   update-alternatives --remove scp ${bindir}/dropbearmulti

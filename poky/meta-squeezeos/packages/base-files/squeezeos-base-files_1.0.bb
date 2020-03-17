@@ -3,7 +3,7 @@ SECTION = "base"
 PRIORITY = "required"
 LICENSE = "GPL"
 
-PR = "r126"
+PR = "r127"
 
 SRC_URI = " \
 	file://asound.conf \
@@ -40,6 +40,7 @@ SRC_URI = " \
 	file://wpa_supplicant.conf \
 	file://dropbear_dss_host_key \
 	file://dropbear_rsa_host_key \
+	file://dropbear_ecdsa_host_key \
 	file://psall \
 	file://watchdog.conf \
 	file://repair.sh \
@@ -122,6 +123,7 @@ do_install () {
 	# dropbear keys - these should be dynamically generated, but it takes too long
 	install -m 0600 ${WORKDIR}/dropbear_dss_host_key ${D}${sysconfdir}/dropbear/dropbear_dss_host_key
 	install -m 0600 ${WORKDIR}/dropbear_rsa_host_key ${D}${sysconfdir}/dropbear/dropbear_rsa_host_key
+	install -m 0600 ${WORKDIR}/dropbear_ecdsa_host_key ${D}${sysconfdir}/dropbear/dropbear_ecdsa_host_key
 
 	# network scripts
 	install -m 0755 -d ${D}${sysconfdir}/network/if-down.d
