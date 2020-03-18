@@ -3,7 +3,7 @@ SECTION = "base"
 PRIORITY = "required"
 LICENSE = "GPL"
 
-PR = "r127"
+PR = "r128"
 
 SRC_URI = " \
 	file://asound.conf \
