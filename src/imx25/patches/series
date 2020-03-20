@@ -1316,6 +1316,7 @@ fixes/fix-shift-overflow-in-ssi-driver-code.patch
 fixes/fix-warning-in-sdma-malloc.patch
 fixes/fix-warning-in-lib-radix.patch
 fixes/fix-warning-in-mxc-wdt.patch
+fixes/fix-wireless-event-too-big.patch
 
 # ----------------------------------------------------------------------------
 # Some additonal patches to make the RT-kernel behave better or easier to
