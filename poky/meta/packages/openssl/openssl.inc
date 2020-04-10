@@ -3,10 +3,11 @@ HOMEPAGE = "http://www.openssl.org/"
 LICENSE = "openssl"
 SECTION = "libs/network"
 
-SRC_URI = "http://www.openssl.org/source/openssl-${PV}.tar.gz"
+SRC_URI = "http://www.openssl.org/source/openssl-${PV}.tar.gz \
+	http://www.openssl.org/source/openssl-${PV}-perlpath.tar.gz"
+
 S = "${WORKDIR}/openssl-${PV}"
 
-AR_append = " r"
 CFLAG = "${@base_conditional('SITEINFO_ENDIANESS', 'le', '-DL_ENDIAN', '-DB_ENDIAN', d)} \
 	-DTERMIO ${FULL_OPTIMIZATION} -Wall"
 
@@ -19,8 +20,8 @@ export EX_LIBS = "-lgcc -ldl"
 export AS = "${CC} -c"
 
 PACKAGES =+ "libcrypto libssl"
-FILES_libcrypto = "${libdir}/libcrypto.so.*"
-FILES_libssl = "${libdir}/libssl.so.*"
+FILES_libcrypto = "${libdir}/libcrypto.so.* ${libdir}/engines-1.1/*.so"
+FILES_libssl = "${libdir}/libssl.so.* ${libdir}/ssl/*.cnf ${libdir}/ssl/misc/*"
 
 do_configure () {
 	cd util
@@ -33,12 +34,16 @@ do_configure () {
 		os=linux
 	fi
 	target="$os-${HOST_ARCH}"
+
 	case $target in
 	linux-arm)
-		target=linux-elf-arm
+		target=linux-armv4
 		;;
 	linux-armeb)
-		target=linux-elf-armeb
+		target=linux-armv4
+		;;
+	linux-gnueabi-arm)
+		target=linux-armv4
 		;;
 	linux-sh3)
 		target=debian-sh3
@@ -47,13 +52,13 @@ do_configure () {
 		target=debian-sh4
 		;;
 	linux-i486)
-		target=debian-i386-i486
+		target=linux-generic32
 		;;
 	linux-i586)
-		target=debian-i386-i586
+		target=linux-generic32
 		;;
 	linux-i686)
-		target=debian-i386-i686/cmov
+		target=linux-generic32
 		;;
 	linux-mips)
 		target=debian-mips
@@ -88,7 +93,7 @@ do_stage () {
 
 do_install () {
 	install -m 0755 -d ${D}${libdir}/pkgconfig
-	oe_runmake INSTALL_PREFIX="${D}" install
+	oe_runmake DESTDIR="${D}" install
 	chmod 644 ${D}${libdir}/pkgconfig/openssl.pc
 	oe_libinstall -so libcrypto ${D}${libdir}
 	oe_libinstall -so libssl ${D}${libdir}
