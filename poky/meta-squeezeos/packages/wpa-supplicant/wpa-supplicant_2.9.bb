@@ -1,4 +1,4 @@
-DESCRIPTION = "wpasupplicant"
+DESCRIPTION = "wpa-supplicant"
 SECTION = "base"
 LICENSE = "GNU GPL"
 
@@ -32,8 +32,8 @@ do_install() {
 	install -m 0755 ${S}/wpa_cli ${D}${sbindir}/wpa_cli
 }
 
-PACKAGES = "wpasupplicant-dbg wpasupplicant"
+PACKAGES = "wpa-supplicant-dbg wpa-supplicant"
 
-FILES_wpasupplicant = "${sbindir}"
-FILES_wpasupplicant-dbg = "${sbindir}.debug"
+FILES_wpa-supplicant = "${sbindir}"
+FILES_wpa-supplicant-dbg = "${sbindir}.debug"
 

@@ -1,11 +1,11 @@
-DESCRIPTION = "wpasupplicant"
+DESCRIPTION = "wpa-supplicant"
 SECTION = "base"
 LICENSE = "GNU GPL"
 
 PV = "0.6.9"
 PR = "r5"
 
-PROVIDES = "wpasupplicant"
+PROVIDES = "wpa-supplicant"
 
 SRC_URI = "http://hostap.epitest.fi/releases/wpa_supplicant-${PV}.tar.gz \
 	   file://wps.patch;patch=1;pnum=0 \
@@ -38,8 +38,8 @@ do_install() {
 	install -m 0755 ${S}/wpa_cli ${D}${sbindir}/wpa_cli
 }
 
-PACKAGES = "wpasupplicant-dbg wpasupplicant"
+PACKAGES = "wpa-supplicant-dbg wpa-supplicant"
 
-FILES_wpasupplicant = "${sbindir}"
-FILES_wpasupplicant-dbg = "${sbindir}.debug"
+FILES_wpa-supplicant = "${sbindir}"
+FILES_wpa-supplicant-dbg = "${sbindir}.debug"
 
