@@ -14,6 +14,11 @@ RDEPENDS += "freefont"
 SRC_URI = "${SQUEEZEPLAY_SCM};module=squeezeplay \
 	file://logconf.lua"
 
+SRC_URI_append_baby = " \
+	file://0001-Initialize-effects-resampler-while-pcm-closed.patch;patch=1 \
+	file://0002-Eliminate-bass-drop-out-by-disabling-XRUN-and-substi.patch;patch=1 \
+	"
+
 S = "${WORKDIR}/squeezeplay"
 
 ARM_INSTRUCTION_SET = "arm"
