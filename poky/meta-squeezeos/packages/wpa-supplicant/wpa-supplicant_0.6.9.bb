@@ -7,7 +7,7 @@ PR = "r5"
 
 PROVIDES = "wpa-supplicant"
 
-SRC_URI = "http://hostap.epitest.fi/releases/wpa_supplicant-${PV}.tar.gz \
+SRC_URI = "http://w1.fi/releases/wpa_supplicant-${PV}.tar.gz \
 	   file://wps.patch;patch=1;pnum=0 \
 	   file://allow-special-char-in-ssid.patch;patch=1;pnum=0 \
 	   file://config-file-sync.patch;patch=1;pnum=0 \

@@ -1,11 +1,11 @@
 DESCRIPTION = "User mode helpers for the hostap driver"
-HOMEPAGE = "http://hostap.epitest.fi"
+HOMEPAGE = "http://w1.fi"
 SECTION = "kernel/userland"
 PRIORITY = "optional"
 LICENSE = "GPL"
 PR = "r4"
 
-SRC_URI = "http://hostap.epitest.fi/releases/hostap-utils-${PV}.tar.gz \
+SRC_URI = "http://w1.fi/releases/hostap-utils-${PV}.tar.gz \
 	   file://hostap-fw-load.patch;patch=1"
 S = "${WORKDIR}/hostap-utils-${PV}"
 

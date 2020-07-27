@@ -4,7 +4,7 @@ LICENSE = "GNU GPL"
 
 PR = "r0"
 
-SRC_URI = "http://hostap.epitest.fi/releases/wpa_supplicant-${PV}.tar.gz \
+SRC_URI = "http://w1.fi/releases/wpa_supplicant-${PV}.tar.gz \
 	   file://defconfig"
 
 S = "${WORKDIR}/wpa_supplicant-${PV}/wpa_supplicant"
