@@ -46,7 +46,7 @@ do_configure_prepend() {
 }
 
 # jive needs EXTRAVERSION -P7 for legacy reasons
-EXTRA_OEMAKE = "EXTRAVERSION=-P7"
+EXTRA_OEMAKE = "EXTRAVERSION=-P7-gd076382e"
 
 # adjust the package names to remove the -P7
 PKG_kernel-image = "kernel-image-${PV}"
