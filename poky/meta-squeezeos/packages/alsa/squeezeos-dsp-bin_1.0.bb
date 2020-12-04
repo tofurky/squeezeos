@@ -1,23 +1,19 @@
 DESCRIPTION = "SqueezeOS DSP - Private code"
 LICENSE = "Confidential"
 
-PV = "${DISTRO_VERSION}+svnr${SRCREV}"
-PR = "r3"
+PR = "r4"
 
 PROVIDES = "squeezeos-dsp"
 
 DEPENDS += "alsa-lib"
 
-# no thumb here thanks!
-ARM_INSTRUCTION_SET = "arm"
-
-SRC_URI="http://ralph.irving.sdf.org/squeezeos/babydsp-7.7.3r16676.tar.gz;module=squeezeos_dsp"
+SRC_URI="file://libasound_module_pcm_babydsp.so"
 
 S = "${WORKDIR}/squeezeos_dsp"
 
 do_install() {
 	mkdir -p ${D}/${libdir}/alsa-lib
-	install -m 0644 .libs/libasound_module_pcm_babydsp.so.0.0.0 ${D}/${libdir}/alsa-lib/libasound_module_pcm_babydsp.so
+	install -m 0644 ${WORKDIR}/libasound_module_pcm_babydsp.so ${D}/${libdir}/alsa-lib/libasound_module_pcm_babydsp.so
 }
 
 PACKAGES = "squeezeos-dsp squeezeos-dsp-dbg"
