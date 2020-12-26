@@ -4,7 +4,8 @@ PR = "r6"
 
 SRC_URI += "file://procmodule.patch;patch=1 \
             file://psmodule.patch;patch=1 \
-	    file://linux-limits.patch;patch=1"
+	    file://linux-limits.patch;patch=1 \
+	    file://unknown-hertz-value.patch;patch=1"
 
 EXTRA_OEMAKE = "CFLAGS=-I${STAGING_INCDIR} \
 		CPPFLAGS=-I${STAGING_INCDIR} \
