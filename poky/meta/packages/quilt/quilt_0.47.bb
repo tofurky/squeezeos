@@ -4,7 +4,8 @@ require quilt_${PV}.inc
 
 PR = "r1"
 
-SRC_URI += "file://aclocal.patch;patch=1"
+SRC_URI += "file://aclocal.patch;patch=1 \
+	file://patch.patch;patch=1"
 
 inherit autotools gettext
 
