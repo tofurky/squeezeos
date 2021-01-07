@@ -1314,6 +1314,7 @@ unionsfs/0498-Unionfs-release-2.5.1.patch
 #fixes/fix-warning-in-lib-radix.patch
 #fixes/fix-warning-in-mxc-wdt.patch
 fixes/fix-wireless-event-too-big.patch
+fixes/makefile.patch
 
 # ----------------------------------------------------------------------------
 # Some additonal patches to make the RT-kernel behave better or easier to
