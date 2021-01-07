@@ -1,0 +1,4 @@
+*.pyc
+poky/build/conf
+poky/sources
+poky/build
