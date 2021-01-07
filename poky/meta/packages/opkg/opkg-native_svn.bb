@@ -10,3 +10,5 @@ target_libdir := "${libdir}"
 inherit native
 
 EXTRA_OECONF += "--with-opkglibdir=${target_libdir} --disable-gpg"
+
+CFLAGS_prepend = "-Wno-error=unused-but-set-variable "
