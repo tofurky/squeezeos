@@ -11,6 +11,8 @@ PATCHTOOL = "patch"
 EXTRA_OECONF = "--disable-nls"
 
 do_configure () {
+	rm -f configure
+	autoconf
 	oe_runconf
 }
 
