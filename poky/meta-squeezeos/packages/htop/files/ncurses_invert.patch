@@ -1,0 +1,24 @@
+diff -uNr git/RichString.c git.hack/RichString.c
+--- git/RichString.c	2021-01-07 22:12:34.000000000 -0500
++++ git.hack/RichString.c	2021-01-07 22:42:23.226259111 -0500
+@@ -12,7 +12,7 @@
+ 
+ #include "debug.h"
+ #include <assert.h>
+-#ifdef HAVE_LIBNCURSESW
++#ifndef HAVE_LIBNCURSESW
+ #include <curses.h>
+ #else
+ #include <ncursesw/curses.h>
+diff -uNr git/RichString.h git.hack/RichString.h
+--- git/RichString.h	2021-01-07 22:12:34.000000000 -0500
++++ git.hack/RichString.h	2021-01-07 22:42:16.769654163 -0500
+@@ -15,7 +15,7 @@
+ 
+ #include "debug.h"
+ #include <assert.h>
+-#ifdef HAVE_LIBNCURSESW
++#ifndef HAVE_LIBNCURSESW
+ #include <curses.h>
+ #else
+ #include <ncursesw/curses.h>
