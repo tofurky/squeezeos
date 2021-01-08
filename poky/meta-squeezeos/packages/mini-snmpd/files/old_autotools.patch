@@ -1,0 +1,12 @@
+diff -uNr mini-snmpd-1.6/configure.ac mini-snmpd-1.6.new/configure.ac
+--- mini-snmpd-1.6/configure.ac	2020-02-23 07:58:41.000000000 +0000
++++ mini-snmpd-1.6.new/configure.ac	2021-01-08 03:54:45.319165122 +0000
+@@ -2,7 +2,7 @@
+ 	[https://troglobit.com/projects/mini-snmpd/])
+ AC_CONFIG_AUX_DIR(aux)
+ AM_INIT_AUTOMAKE([1.11 foreign subdir-objects])
+-AM_SILENT_RULES([yes])
++m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+ 
+ AC_CONFIG_SRCDIR([mini-snmpd.c])
+ AC_CONFIG_HEADER([config.h])
