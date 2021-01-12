@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.32.1
-# Sat Jan  9 04:37:48 2021
+# Mon Jan 11 23:46:37 2021
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -625,8 +625,8 @@ CONFIG_XXD=y
 CONFIG_HWCLOCK=y
 CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS=y
 # CONFIG_IONICE is not set
-# CONFIG_IPCRM is not set
-# CONFIG_IPCS is not set
+CONFIG_IPCRM=y
+CONFIG_IPCS=y
 CONFIG_LAST=y
 # CONFIG_FEATURE_LAST_FANCY is not set
 CONFIG_LOSETUP=y
@@ -832,7 +832,7 @@ CONFIG_TTYSIZE=y
 # CONFIG_UBIUPDATEVOL is not set
 # CONFIG_UBIRENAME is not set
 # CONFIG_VOLNAME is not set
-# CONFIG_WATCHDOG is not set
+CONFIG_WATCHDOG=y
 
 #
 # Networking Utilities
