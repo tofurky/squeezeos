@@ -78,6 +78,7 @@ inherit update-rc.d
 # --disable-static isn't supported by chrony's configure script.
 DISABLE_STATIC = ""
 
+export CFLAGS += -D_GNU_SOURCE
 do_configure() {
     ./configure --sysconfdir=${sysconfdir} --bindir=${bindir} --sbindir=${sbindir} \
                 --localstatedir=${localstatedir} --datarootdir=${datadir} \
@@ -85,6 +86,7 @@ do_configure() {
                 --with-pidfile=/run/chrony/chronyd.pid \
                 --chronyrundir=/run/chrony \
                 --host-system=Linux \
+                --disable-ipv6 --disable-refclock \
                 ${PACKAGECONFIG_CONFARGS}
 }
 
