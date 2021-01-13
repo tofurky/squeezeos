@@ -1,0 +1,331 @@
+commit 405cc9b736b5770edde5116abd5f15817634f602
+Author: Matt Merhar <mattmerhar@protonmail.com>
+Date:   Tue Jan 12 22:41:59 2021 -0500
+
+    Add semaphore watcher
+    
+    Per /squeezeos/poky/meta-squeezeos/packages/watchdog/watchdog-5.6/watchdog-semaphore.patch
+
+diff --git a/examples/sem_ping.c b/examples/sem_ping.c
+new file mode 100644
+index 0000000..3ff2521
+--- /dev/null
++++ b/examples/sem_ping.c
+@@ -0,0 +1,90 @@
++
++/*
++ * This file shows how to use the watchdog semaphores from an application
++ * program.
++ */
++
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/types.h>
++#include <sys/ipc.h>
++#include <sys/sem.h>
++
++
++static int wdog_sem_id = -1;
++
++
++/*
++ * Return a watchdog id, otherwise -1 if an error happens. If nowayout
++ * is true the watchdog remain active when the process exits, causing
++ * a reboot.
++ */
++static int watchdog_sem_get(key_t key, int nowayout)
++{
++	struct sembuf sops[] = {
++		{ 0, -1, IPC_NOWAIT },
++		{ 0, 1, IPC_NOWAIT }
++	};
++	int sem_num;
++
++	if (wdog_sem_id == -1) {
++		wdog_sem_id = semget(key, 10, 0666 | IPC_CREAT);
++		if (wdog_sem_id == -1) {
++			perror("semget");
++			return -1;
++		}
++	}
++
++	if (!nowayout) {
++		sops[0].sem_flg |= SEM_UNDO;
++	}
++
++	sem_num = 0;
++	while (1) {
++		sops[0].sem_num = sem_num;
++		sops[1].sem_num = sem_num + 1;
++
++		if (semop(wdog_sem_id, sops, 2) == 0) {
++			return sem_num;
++		}
++
++		if (errno == EFBIG) {
++			return -1;
++		}
++
++		sem_num += 2;
++	}
++}
++
++
++/*
++ * Keep the watchdog alive for count intervals.
++ */
++static int watchdog_sem_keepalive(int wdog_id, int count)
++{
++	if (semctl(wdog_sem_id, wdog_id + 1, SETVAL, count) == -1) {
++		perror("semctl");
++		return -1;
++	}
++
++	return 0;
++}
++
++
++
++int main(int argc, char *argv)
++{
++	int wdog_id;
++
++	wdog_id = watchdog_sem_get(1234, argc > 1);
++	if (wdog_id == -1) {
++		printf("can't get watchdog sem\n");
++		exit(-1);
++	}
++
++	while (1) {
++		watchdog_sem_keepalive(wdog_id, 1);
++		sleep(1);
++	}
++}
+diff --git a/include/extern.h b/include/extern.h
+index 7791524..808e7b4 100644
+--- a/include/extern.h
++++ b/include/extern.h
+@@ -74,6 +74,8 @@ struct list {
+ 
+ #define TS_SIZE	12
+ 
++#define NUM_SEMS	20
++
+ /* === External variables === */
+ /* From configfile.c */
+ extern int tint;
+@@ -92,6 +94,8 @@ extern int temp_poweroff;
+ extern int sigterm_delay;
+ extern int repair_max;
+ extern int startup_delay;
++extern int semid;
++extern key_t semkey;
+ 
+ extern char *devname;
+ extern char *admin;
+@@ -236,4 +240,7 @@ int reopen_std_files(int flags);
+ /** send-email.c **/
+ int send_email(int errorcode, void *ptr);
+ 
++/** semaphore.c **/
++int check_semaphore(void);
++
+ #endif /*_EXTERN_H_*/
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 6bbbe7a..6a61268 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -6,7 +6,7 @@ watchdog_SOURCES = file_stat.c file_table.c iface.c gettime.c keep_alive.c \
+ 			temp.c test_binary.c watchdog.c \
+ 			logmessage.c xmalloc.c heartbeat.c lock_mem.c daemon-pid.c configfile.c \
+ 			errorcodes.c read-conf.c sigterm.c reopenstd.c killall5.c send-email.c \
+-			run-as-child.c
++			semaphore.c run-as-child.c
+ 
+ # for glibc before 2.17 due to clock_gettime()
+ watchdog_LDADD = -lrt
+diff --git a/src/configfile.c b/src/configfile.c
+index 6e180e7..e40a1df 100644
+--- a/src/configfile.c
++++ b/src/configfile.c
+@@ -18,6 +18,8 @@
+ #include <dirent.h>
+ #include <limits.h>
+ #include <sys/stat.h>
++#include <sys/ipc.h>
++#include <sys/sem.h>
+ 
+ #include "extern.h"
+ #include "watch_err.h"
+@@ -26,6 +28,7 @@
+ static void add_test_binaries(const char *path);
+ static void set_file_list_change(int change, int linecount);
+ static void parse_arg_val(char *arg, char *val, int linecount);
++static void open_semaphore(key_t key);
+ 
+ #define ADMIN			"admin"
+ #define CHANGE			"change"
+@@ -64,6 +67,7 @@ static void parse_arg_val(char *arg, char *val, int linecount);
+ #define RETRYTIMEOUT	"retry-timeout"
+ #define REPAIRMAX		"repair-maximum"
+ #define STARTUP_DELAY	"startup-delay"
++#define SEMKEY			"semkey"
+ #define VERBOSE			"verbose"
+ #define LOG_KILLED_PIDS	"log-killed-pids"
+ 
+@@ -104,6 +108,9 @@ char *logdir = "/var/log/watchdog";
+ char *heartbeat = NULL;
+ int hbstamps = 300;
+ 
++key_t semkey = -1; /* ID of System V semaphore to check */
++int semid = -1;
++
+ int refresh_use_settimeout = ENUM_AUTO;
+ int refresh_ignore_errors = FALSE;
+ int realtime = FALSE;
+@@ -225,6 +232,9 @@ void read_config(char *configfile)
+ 	if (maxload1 && !maxload15)
+ 		maxload15 = maxload1 / 2;
+ 
++	/* create System V semaphore if required. */
++	if (semkey)
++		open_semaphore(semkey);
+ }
+ 
+ /*
+@@ -294,6 +304,7 @@ static void parse_arg_val(char *arg, char *val, int linecount)
+ 	READ_INT(RETRYTIMEOUT, &retry_timeout);
+ 	READ_INT(REPAIRMAX, &repair_max);
+ 	READ_INT(STARTUP_DELAY, &startup_delay);
++	READ_INT(SEMKEY, &semkey);
+ 	READ_INT(VERBOSE, &verbose);
+ 	READ_YESNO(LOG_KILLED_PIDS, &log_killed_PIDs);
+ 
+@@ -399,6 +410,31 @@ static void add_test_binaries(const char *path)
+ 	closedir(d);
+ }
+ 
++/*
++ * Open the System V semaphore
++ */
++
++static void open_semaphore(key_t key) {
++	if (verbose)
++		log_message(LOG_DEBUG, "attempting open of semaphore with id %d", key);
++
++	semid = semget(key, NUM_SEMS, 0);
++
++	if (semid == -1) {
++		semid = semget(key, NUM_SEMS, 0666 | IPC_CREAT);
++
++		if (semid == -1) {
++			log_message(LOG_ERR, "cannot get sempahore %d (errno = %d = '%m')", key, errno);
++		}
++		else {
++			int sem_num;
++
++			for (sem_num = 0; sem_num < NUM_SEMS; sem_num += 2)
++				semctl(semid, sem_num, SETVAL, 1);
++		}
++	}
++}
++
+ /*
+  * Free all of the lists allocated by read_config()
+  */
+diff --git a/src/semaphore.c b/src/semaphore.c
+new file mode 100644
+index 0000000..95243c1
+--- /dev/null
++++ b/src/semaphore.c
+@@ -0,0 +1,61 @@
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
++#include <errno.h>
++#include <stdio.h>
++#include <sys/types.h>
++#include <sys/ipc.h>
++#include <sys/sem.h>
++#include "extern.h"
++#include "watch_err.h"
++
++int check_semaphore(void)
++{
++	struct sembuf sops = { 0, -1, IPC_NOWAIT };
++	int sem_num = 0;
++
++	if (semid == -1) {
++		return(ENOERR);
++	}
++
++	for (sem_num = 0; sem_num < NUM_SEMS; sem_num += 2) {
++		int active = semctl(semid, sem_num, GETVAL);
++
++		if (active == -1) {
++			int err = errno;
++
++			log_message(LOG_ERR, "semctl gave errno = %d = '%s'", err, strerror(err));
++
++			if (softboot)
++				return(err);
++		}
++		else if (active == 0) {
++			/* semaphore active */
++			sops.sem_num = sem_num + 1;
++
++			if (semop(semid, &sops, 1) == -1) {
++				int err = errno;
++
++				if (err == EAGAIN) {
++					int pid = semctl(semid, sem_num, GETPID);
++
++					log_message(LOG_ERR, "semaphore %d:%d was not changed.", pid, sem_num);
++
++					return(ENOCHANGE);
++				}
++				else {
++					log_message(LOG_ERR, "semop gave errno = %d = '%s'", err, strerror(err));
++
++					if (softboot)
++						return(err);
++				}
++
++			}
++		}
++
++		sem_num += 2;
++	}
++
++	return(ENOERR);
++}
+diff --git a/src/watchdog.c b/src/watchdog.c
+index f924f97..6e44014 100644
+--- a/src/watchdog.c
++++ b/src/watchdog.c
+@@ -312,6 +312,13 @@ static void print_info(int sync_it, int force)
+ 
+ 	log_message(LOG_INFO, " startup delay = %d seconds", startup_delay);
+ 
++	if (semid == -1) {
++		log_message(LOG_INFO, " semaphore: no keys to check");
++	}
++	else {
++		log_message(LOG_INFO, " semaphore: semkey = %d, semid = %d", semkey, semid);
++	}
++
+ 	log_message(LOG_INFO, " alive=%s heartbeat=%s to=%s no_act=%s force=%s",
+ 		    (devname == NULL) ? "[none]" : devname,
+ 		    (heartbeat == NULL) ? "[none]" : heartbeat,
+@@ -510,6 +517,9 @@ int main(int argc, char *const argv[])
+ 		/* check allocatable memory */
+ 		do_check(check_allocatable(), repair_bin, alloctimer);
+ 
++		/* check semaphore */
++		do_check(check_semaphore(), repair_bin, NULL);
++
+ 		/* check temperature */
+ 		for (act = temp_list; act != NULL; act = act->next)
+ 			do_check(check_temp(act), repair_bin, act);
