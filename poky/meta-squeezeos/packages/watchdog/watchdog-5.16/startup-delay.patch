@@ -1,0 +1,77 @@
+commit a95e452a94f58cf44d9c33ad864c1b51111d57d0
+Author: Matt Merhar <mattmerhar@protonmail.com>
+Date:   Tue Jan 12 21:13:48 2021 -0500
+
+    Add startup-delay setting
+    
+    Per /squeezeos/poky/meta-squeezeos/packages/watchdog/watchdog-5.6/startup-delay.patch
+
+diff --git a/include/extern.h b/include/extern.h
+index 81bc620..7791524 100644
+--- a/include/extern.h
++++ b/include/extern.h
+@@ -91,6 +91,7 @@ extern int pingcount;
+ extern int temp_poweroff;
+ extern int sigterm_delay;
+ extern int repair_max;
++extern int startup_delay;
+ 
+ extern char *devname;
+ extern char *admin;
+diff --git a/src/configfile.c b/src/configfile.c
+index d971d44..6e180e7 100644
+--- a/src/configfile.c
++++ b/src/configfile.c
+@@ -63,6 +63,7 @@ static void parse_arg_val(char *arg, char *val, int linecount);
+ #define SIGTERM_DELAY	"sigterm-delay"
+ #define RETRYTIMEOUT	"retry-timeout"
+ #define REPAIRMAX		"repair-maximum"
++#define STARTUP_DELAY	"startup-delay"
+ #define VERBOSE			"verbose"
+ #define LOG_KILLED_PIDS	"log-killed-pids"
+ 
+@@ -88,6 +89,7 @@ int pingcount = 3;
+ int temp_poweroff = TRUE;
+ int sigterm_delay = 5;	/* Seconds from first SIGTERM to sending SIGKILL during shutdown. */
+ int repair_max = 1; /* Number of repair attempts without success. */
++int startup_delay = 0; /* Seconds to delay before beginning pid etc. checks */
+ 
+ char *devname = NULL;
+ char *admin = "root";
+@@ -291,6 +293,7 @@ static void parse_arg_val(char *arg, char *val, int linecount)
+ 	READ_INT(SIGTERM_DELAY, &sigterm_delay);
+ 	READ_INT(RETRYTIMEOUT, &retry_timeout);
+ 	READ_INT(REPAIRMAX, &repair_max);
++	READ_INT(STARTUP_DELAY, &startup_delay);
+ 	READ_INT(VERBOSE, &verbose);
+ 	READ_YESNO(LOG_KILLED_PIDS, &log_killed_PIDs);
+ 
+diff --git a/src/watchdog.c b/src/watchdog.c
+index 6a8a173..f924f97 100644
+--- a/src/watchdog.c
++++ b/src/watchdog.c
+@@ -310,6 +310,8 @@ static void print_info(int sync_it, int force)
+ 		log_message(LOG_INFO, " repair attempts = unlimited");
+ 	}
+ 
++	log_message(LOG_INFO, " startup delay = %d seconds", startup_delay);
++
+ 	log_message(LOG_INFO, " alive=%s heartbeat=%s to=%s no_act=%s force=%s",
+ 		    (devname == NULL) ? "[none]" : devname,
+ 		    (heartbeat == NULL) ? "[none]" : heartbeat,
+@@ -484,6 +486,15 @@ int main(int argc, char *const argv[])
+ 	while (_running) {
+ 		wd_action(keep_alive(), repair_bin, NULL);
+ 
++		/* wait for startup-delay seconds */
++		if (startup_delay) {
++			sleep(1);
++
++			startup_delay--;
++
++			continue;
++		}
++
+ 		/* sync system if we have to */
+ 		do_check(sync_system(sync_it), repair_bin, NULL);
+ 
