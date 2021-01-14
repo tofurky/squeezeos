@@ -1,0 +1,12 @@
+diff -uNr pkg-config-0.23/glib-1.2.10/glib.h pkg-config-0.23.new/glib-1.2.10/glib.h
+--- pkg-config-0.23/glib-1.2.10/glib.h	2001-02-26 22:44:38.000000000 -0500
++++ pkg-config-0.23.new/glib-1.2.10/glib.h	2021-01-13 19:26:04.913766459 -0500
+@@ -204,7 +204,7 @@
+ #ifndef G_INLINE_FUNC
+ #  ifdef __GNUC__
+ #    ifdef __OPTIMIZE__
+-#      define G_INLINE_FUNC extern inline
++#      define G_INLINE_FUNC static inline
+ #    else
+ #      undef G_CAN_INLINE
+ #      define G_INLINE_FUNC extern
