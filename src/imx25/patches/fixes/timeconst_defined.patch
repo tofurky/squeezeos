@@ -1,0 +1,12 @@
+diff -uNr linux-2.6.26/kernel/timeconst.pl linux-2.6.26.new/kernel/timeconst.pl
+--- linux-2.6.26/kernel/timeconst.pl	2008-07-13 17:51:29.000000000 -0400
++++ linux-2.6.26.new/kernel/timeconst.pl	2021-01-13 23:07:19.100012642 -0500
+@@ -370,7 +370,7 @@
+ 	}
+ 
+ 	@val = @{$canned_values{$hz}};
+-	if (!defined(@val)) {
++	if (!scalar(@val)) {
+ 		@val = compute_values($hz);
+ 	}
+ 	output($hz, @val);

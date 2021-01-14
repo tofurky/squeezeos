@@ -1318,6 +1318,7 @@ fixes/fix-warning-in-lib-radix.patch
 fixes/fix-warning-in-mxc-wdt.patch
 fixes/fix-wireless-event-too-big.patch
 fixes/makefile.patch
+fixes/timeconst_defined.patch
 
 # ----------------------------------------------------------------------------
 # Some additonal patches to make the RT-kernel behave better or easier to
