@@ -1,0 +1,25 @@
+diff -uNr lzo-2.02/src/miniacc.h lzo-2.02.new/src/miniacc.h
+--- lzo-2.02/src/miniacc.h	2005-10-17 12:10:50.000000000 -0400
++++ lzo-2.02.new/src/miniacc.h	2021-01-13 23:27:55.728177261 -0500
+@@ -3977,10 +3977,10 @@
+ #endif
+ #if (ACC_CC_TURBOC && (__TURBOC__ < 0x0150))
+ #else
+-    ACCCHK_ASSERT((1   << (8*SIZEOF_INT-1)) < 0)
++    ACCCHK_ASSERT((int)(1u   << (8*SIZEOF_INT-1)) < 0)
+ #endif
+     ACCCHK_ASSERT((1u  << (8*SIZEOF_INT-1)) > 0)
+-    ACCCHK_ASSERT((1l  << (8*SIZEOF_LONG-1)) < 0)
++    ACCCHK_ASSERT((long)(1ul  << (8*SIZEOF_LONG-1)) < 0)
+     ACCCHK_ASSERT((1ul << (8*SIZEOF_LONG-1)) > 0)
+ #if defined(acc_int16e_t)
+     ACCCHK_ASSERT(sizeof(acc_int16e_t) == 2)
+@@ -4183,7 +4183,7 @@
+ #elif (ACC_CC_NDPC)
+ #elif 1 && (ACC_CC_LCC || ACC_CC_LCCWIN32)
+ #elif !defined(ACC_BROKEN_INTEGRAL_PROMOTION) && (SIZEOF_INT > 1)
+-    ACCCHK_ASSERT( (((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
++    ACCCHK_ASSERT( (int)((unsigned int)((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
+ #endif
+ #if (ACC_CC_BORLANDC && (__BORLANDC__ >= 0x0530) && (__BORLANDC__ < 0x0560))
+ #  pragma option pop
