@@ -7,6 +7,7 @@ PR = "r1"
 
 SRC_URI = "http://www.oberhumer.com/opensource/lzo/download/lzo-${PV}.tar.gz \
            file://autofoo.patch;patch=1 \
+           file://lzo_gcc6_acc.patch;patch=1 \
            file://acinclude.m4"
 
 inherit autotools_stage
