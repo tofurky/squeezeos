@@ -24,7 +24,6 @@ FILES_libssl = "${libdir}/libssl.so.* ${libdir}/ssl/*.cnf ${libdir}/ssl/misc/*"
 
 do_configure () {
 	cd util
-	perl perlpath.pl ${bindir}
 	cd ..
 	ln -sf apps/openssl.pod crypto/crypto.pod ssl/ssl.pod doc/
 
