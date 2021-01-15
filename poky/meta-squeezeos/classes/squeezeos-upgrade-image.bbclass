@@ -20,7 +20,7 @@ do_squeezeos_image() {
 	cp ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGE_NAME} ${tmpdir}/zImage${IMAGE_SQUEEZEOS_EXTRA_VERSION}
 	cp ${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE_NAME} ${tmpdir}/root.cramfs
 	cp ${TMPDIR}/rootfs/etc/squeezeos.version ${tmpdir}/jive.version
-	echo -e ${IMAGE_SQUEEZEOS_BOARD_VERSION} > ${tmpdir}/board.version
+	printf ${IMAGE_SQUEEZEOS_BOARD_VERSION} > ${tmpdir}/board.version
 
 	# Prepare files
 	cd ${tmpdir}
