@@ -8,7 +8,9 @@ DEPENDS = "libtool-cross"
 PR = "r8"
 
 SRC_URI = "http://www.ijg.org/files/jpegsrc.v${PV}.tar.gz \
-	file://silent_rules.patch;patch=1"
+	file://silent_rules.patch;patch=1 \
+	file://fix_for_automake_1.11.2.patch;patch=1 \
+	file://jpeg_fix_for_automake-1.12.patch;patch=1"
 
 inherit autotools 
 
