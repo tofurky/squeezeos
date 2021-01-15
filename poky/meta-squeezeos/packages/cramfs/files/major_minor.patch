@@ -1,0 +1,11 @@
+diff -uNr cramfs-1.1/mkcramfs.c cramfs-1.1.new/mkcramfs.c
+--- cramfs-1.1/mkcramfs.c	2021-01-14 22:46:57.985018312 -0500
++++ cramfs-1.1.new/mkcramfs.c	2021-01-14 23:01:46.193153715 -0500
+@@ -35,6 +35,7 @@
+ #include <stdarg.h>
+ #include <linux/cramfs_fs.h>
+ #include <zlib.h>
++#include <sys/sysmacros.h>
+ 
+ /* Exit codes used by mkfs-type programs */
+ #define MKFS_OK          0	/* No errors */
