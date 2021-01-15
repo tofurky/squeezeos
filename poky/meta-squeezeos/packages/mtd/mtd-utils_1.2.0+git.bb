@@ -9,7 +9,8 @@ SRC_URI = "git://git.infradead.org/mtd-utils.git;protocol=git;tag=41c53b6f2d756a
 	   file://new-ubi-git.patch;patch=1 \
 	   file://nanddump_skip_bad_blocks.patch;patch=1 \
 	   file://ubinize_null_img.patch;patch=1 \
-	   file://ubirename.patch;patch=1"
+	   file://ubirename.patch;patch=1 \
+           file://major_minor.patch;patch=1"
 
 S = "${WORKDIR}/git/"
 

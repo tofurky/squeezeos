@@ -1,0 +1,55 @@
+diff -uNr git/mkfs.jffs2.c git.new/mkfs.jffs2.c
+--- git/mkfs.jffs2.c	2021-01-07 02:10:47.000000000 -0500
++++ git.new/mkfs.jffs2.c	2021-01-14 22:54:52.637111783 -0500
+@@ -64,6 +64,7 @@
+ #include <ctype.h>
+ #include <time.h>
+ #include <getopt.h>
++#include <sys/sysmacros.h>
+ #ifndef WITHOUT_XATTR
+ #include <sys/xattr.h>
+ #include <sys/acl.h>
+diff -uNr git/mkfs.ubifs/mkfs.ubifs.h git.new/mkfs.ubifs/mkfs.ubifs.h
+--- git/mkfs.ubifs/mkfs.ubifs.h	2021-01-07 02:10:47.000000000 -0500
++++ git.new/mkfs.ubifs/mkfs.ubifs.h	2021-01-14 22:55:30.533413039 -0500
+@@ -46,6 +46,7 @@
+ #include <libgen.h>
+ #include <ctype.h>
+ #include <uuid/uuid.h>
++#include <sys/sysmacros.h>
+ 
+ #include "crc32.h"
+ #include "defs.h"
+diff -uNr git/tests/ubi-tests/integ.c git.new/tests/ubi-tests/integ.c
+--- git/tests/ubi-tests/integ.c	2021-01-07 02:10:47.000000000 -0500
++++ git.new/tests/ubi-tests/integ.c	2021-01-14 22:56:04.629750932 -0500
+@@ -12,6 +12,7 @@
+ 
+ #include <sys/ioctl.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ 
+ #include "libubi.h"
+ 
+diff -uNr git/ubi-utils/new-utils/src/common.h git.new/ubi-utils/new-utils/src/common.h
+--- git/ubi-utils/new-utils/src/common.h	2021-01-07 02:10:47.000000000 -0500
++++ git.new/ubi-utils/new-utils/src/common.h	2021-01-14 22:57:55.595358337 -0500
+@@ -22,6 +22,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <errno.h>
++#include <sys/sysmacros.h>
+ 
+ #ifdef __cplusplus
+ extern "C" {
+diff -uNr git/ubi-utils/src/libubi.c git.new/ubi-utils/src/libubi.c
+--- git/ubi-utils/src/libubi.c	2021-01-07 02:10:47.000000000 -0500
++++ git.new/ubi-utils/src/libubi.c	2021-01-14 22:57:08.382475346 -0500
+@@ -31,6 +31,7 @@
+ #include <unistd.h>
+ #include <sys/ioctl.h>
+ #include <limits.h>
++#include <sys/sysmacros.h>
+ #include "libubi.h"
+ #include "libubi_int.h"
+ 
