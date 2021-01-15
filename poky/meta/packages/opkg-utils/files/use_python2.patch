@@ -1,0 +1,72 @@
+diff -uNr opkg-utils/makePackage opkg-utils.new/makePackage
+--- opkg-utils/makePackage	2009-09-18 21:34:24.000000000 -0400
++++ opkg-utils.new/makePackage	2021-01-15 11:07:04.344687720 -0500
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/env python2
+ 
+ # The general algorithm this program follows goes like this:
+ #   Run tar to extract control from control.tar.gz from the package.
+diff -uNr opkg-utils/opkg-compare-indexes opkg-utils.new/opkg-compare-indexes
+--- opkg-utils/opkg-compare-indexes	2009-09-18 21:34:24.000000000 -0400
++++ opkg-utils.new/opkg-compare-indexes	2021-01-15 11:07:17.224564700 -0500
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python2
+ 
+ import sys, os
+ from glob import glob
+diff -uNr opkg-utils/opkg-list-fields opkg-utils.new/opkg-list-fields
+--- opkg-utils/opkg-list-fields	2009-09-18 21:34:24.000000000 -0400
++++ opkg-utils.new/opkg-list-fields	2021-01-15 11:07:25.601151346 -0500
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/env python2
+ 
+ import sys, opkg
+ 
+diff -uNr opkg-utils/opkg-make-index opkg-utils.new/opkg-make-index
+--- opkg-utils/opkg-make-index	2009-09-18 21:34:24.000000000 -0400
++++ opkg-utils.new/opkg-make-index	2021-01-15 11:07:31.974423796 -0500
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/env python2
+ 
+ import sys, os, posixpath
+ from glob import glob
+diff -uNr opkg-utils/opkg-show-deps opkg-utils.new/opkg-show-deps
+--- opkg-utils/opkg-show-deps	2009-09-18 21:34:24.000000000 -0400
++++ opkg-utils.new/opkg-show-deps	2021-01-15 11:07:38.177697867 -0500
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/env python2
+ 
+ import sys, os, posixpath
+ from glob import glob
+diff -uNr opkg-utils/opkg-unbuild opkg-utils.new/opkg-unbuild
+--- opkg-utils/opkg-unbuild	2009-09-18 21:34:24.000000000 -0400
++++ opkg-utils.new/opkg-unbuild	2021-01-15 11:07:47.200944984 -0500
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/env python2
+ 
+ import sys, os, re
+ 
+diff -uNr opkg-utils/opkg-update-index opkg-utils.new/opkg-update-index
+--- opkg-utils/opkg-update-index	2009-09-18 21:34:24.000000000 -0400
++++ opkg-utils.new/opkg-update-index	2021-01-15 11:07:53.750882396 -0500
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2.1
++#!/usr/bin/env python2
+ 
+ import sys, os
+ from glob import glob
+diff -uNr opkg-utils/opkg.py opkg-utils.new/opkg.py
+--- opkg-utils/opkg.py	2009-09-18 21:34:24.000000000 -0400
++++ opkg-utils.new/opkg.py	2021-01-15 11:08:00.494151292 -0500
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python2
+ #   Copyright (C) 2001 Alexander S. Guy <a7r@andern.org>
+ #                      Andern Research Labs
+ #
