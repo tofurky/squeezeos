@@ -3,7 +3,8 @@ require libtool.inc
 PR = "r14"
 
 SRC_URI = "${GNU_MIRROR}/libtool/libtool-${PV}a.tar.gz \
-           file://dolt.m4"
+           file://dolt.m4 \
+           file://lzma_deprecated.patch;patch=1"
 
 PACKAGES =+ "libltdl libltdl-dev libltdl-dbg"
 FILES_${PN} += "${datadir}/aclocal*"

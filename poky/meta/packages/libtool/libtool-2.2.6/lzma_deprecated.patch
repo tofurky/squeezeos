@@ -1,0 +1,12 @@
+diff -uNr libtool-2.2.6/configure.ac libtool-2.2.6.new/configure.ac
+--- libtool-2.2.6/configure.ac	2008-09-07 13:43:03.000000000 -0400
++++ libtool-2.2.6.new/configure.ac	2021-01-15 00:34:12.993299339 -0500
+@@ -122,7 +122,7 @@
+ 
+ dnl These are bootstrap requirements! Once built, libtool may work with
+ dnl much older releases of autoconf and automake.  See release notes.
+-AM_INIT_AUTOMAKE([1.10.1 gnu subdir-objects dist-lzma])
++AM_INIT_AUTOMAKE([1.10.1 gnu subdir-objects dist-xz])
+ 
+ dnl We use m4sh to generate libtool's portable shell scripts
+ AC_SUBST([M4SH], ['$(AUTOM4TE) --language=m4sh'])
