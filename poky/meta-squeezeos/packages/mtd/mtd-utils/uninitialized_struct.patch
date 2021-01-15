@@ -1,0 +1,12 @@
+diff -uNr git/ubi-utils/new-utils/src/ubinize.c git.new/ubi-utils/new-utils/src/ubinize.c
+--- git/ubi-utils/new-utils/src/ubinize.c	2021-01-07 02:10:47.000000000 -0500
++++ git.new/ubi-utils/new-utils/src/ubinize.c	2021-01-15 00:23:22.019545804 -0500
+@@ -491,7 +491,7 @@
+ 		goto out_dict;
+ 	}
+ 
+-	vi = malloc(sizeof(struct ubigen_vol_info) * sects);
++	vi = calloc(1, sizeof(struct ubigen_vol_info) * sects);
+ 	if (!vi) {
+ 		errmsg("cannot allocate memory");
+ 		goto out_dict;
