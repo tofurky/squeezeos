@@ -11,4 +11,4 @@ inherit native
 
 EXTRA_OECONF += "--with-opkglibdir=${target_libdir} --disable-gpg"
 
-CFLAGS_prepend = "-Wno-error=unused-but-set-variable -Wno-error=misleading-indentation "
+CFLAGS_prepend = "-Wno-error=unused-but-set-variable -Wno-error=misleading-indentation -Wno-error=stringop-truncation -Wstringop-truncation -Wno-error=stringop-overflow "
