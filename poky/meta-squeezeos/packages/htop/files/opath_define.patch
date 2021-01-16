@@ -1,0 +1,24 @@
+commit 8149823d56653b7d23397a235edb609b358ff17d
+Author: Chris Burr <chrisburr@users.noreply.github.com>
+Date:   Sat Dec 12 11:41:15 2020 +0100
+
+    Define O_PATH if not already defined
+
+diff --git a/linux/LinuxProcessList.c b/linux/LinuxProcessList.c
+index e228220..1dab5db 100644
+--- a/linux/LinuxProcessList.c
++++ b/linux/LinuxProcessList.c
+@@ -57,6 +57,12 @@ in the source distribution for its full text.
+ #endif
+ 
+ 
++// CentOS 6's kernel doesn't provide a definition of O_PATH
++// based on definition taken from uapi/asm-generic/fcnth.h in Linux kernel tree
++#ifndef O_PATH
++# define O_PATH 010000000
++#endif
++
+ static FILE* fopenat(openat_arg_t openatArg, const char* pathname, const char* mode) {
+    assert(String_eq(mode, "r")); /* only currently supported mode */
+ 
+

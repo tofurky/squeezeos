@@ -1,0 +1,24 @@
+diff -uNr git/InfoScreen.c git.new/InfoScreen.c
+--- git/InfoScreen.c	2021-01-15 19:52:39.000000000 -0500
++++ git.new/InfoScreen.c	2021-01-15 20:31:51.246248881 -0500
+@@ -94,7 +94,7 @@
+       if (this->inc->active) {
+          (void) move(LINES - 1, CRT_cursorX);
+       }
+-      set_escdelay(25);
++      ESCDELAY = 25;
+       int ch = getch();
+ 
+       if (ch == ERR) {
+diff -uNr git/ScreenManager.c git.new/ScreenManager.c
+--- git/ScreenManager.c	2021-01-15 19:52:39.000000000 -0500
++++ git.new/ScreenManager.c	2021-01-15 20:32:04.892784414 -0500
+@@ -164,7 +164,7 @@
+       }
+ 
+       int prevCh = ch;
+-      set_escdelay(25);
++      ESCDELAY = 25;
+       ch = getch();
+ 
+       HandlerResult result = IGNORED;
