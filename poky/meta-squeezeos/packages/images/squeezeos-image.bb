@@ -13,7 +13,7 @@ IMAGE_INSTALL += "stress"
 #IMAGE_INSTALL += "tcpdump"
 
 # useful command line tools
-IMAGE_INSTALL += "patch procps alsa-utils-aplay alsa-utils-amixer"
+IMAGE_INSTALL += "procps alsa-utils-aplay alsa-utils-amixer"
 
 # Simple NTP client
 IMAGE_INSTALL += "msntp"
