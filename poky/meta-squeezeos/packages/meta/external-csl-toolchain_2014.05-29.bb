@@ -87,7 +87,8 @@ PACKAGES += "glibc-dbg glibc catchsegv sln nscd ldd localedef glibc-utils glibc-
 
 libc_baselibs = "/lib/libc* /lib/libm* /lib/ld* /lib/libpthread* /lib/libresolv* /lib/librt* /lib/libutil* /lib/libnsl* /lib/libnss_files* /lib/libnss_compat* /lib/libnss_dns* /lib/libdl* /lib/libanl* /lib/libBrokenLocale*"
 
-FILES_glibc = "${sysconfdir} ${libc_baselibs} /sbin/ldconfig ${libexecdir}/* ${datadir}/zoneinfo"
+FILES_glibc = "${sysconfdir} ${libc_baselibs} /sbin/ldconfig ${libexecdir}/*"
+DEPENDS_glibc = "tzdata"
 FILES_glibc-dev = "${includedir}"
 FILES_ldd = "${bindir}/ldd"
 FILES_libsegfault = "/lib/libSegFault*"
