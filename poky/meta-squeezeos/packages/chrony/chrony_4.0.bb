@@ -78,7 +78,7 @@ inherit update-rc.d
 # --disable-static isn't supported by chrony's configure script.
 DISABLE_STATIC = ""
 
-export CFLAGS += -D_GNU_SOURCE
+export CFLAGS += -D_GNU_SOURCE -lpthread
 do_configure() {
     ./configure --sysconfdir=${sysconfdir} --bindir=${bindir} --sbindir=${sbindir} \
                 --localstatedir=${localstatedir} --datarootdir=${datadir} \
