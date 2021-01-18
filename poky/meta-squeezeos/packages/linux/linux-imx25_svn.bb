@@ -13,6 +13,7 @@ inherit kernel
 SRC_URI = " \
           ${KERNELORG_MIRROR}pub/linux/kernel/v2.6/linux-2.6.26.tar.bz2 \
           ${SQUEEZEOS_SVN};module=${LINUX_ARCH} \
+          file://defconfig-baby \
           "
 
 S = "${WORKDIR}/linux-${LINUX_VERSION}"
@@ -26,6 +27,11 @@ do_patch() {
 	cp -rf ${WORKDIR}/${LINUX_ARCH}/patches ${S}
 	cd ${S}
 	quilt push -a
+}
+
+do_configure_prepend() {
+	# the .config is touched by multiple patches, so just throw the whole file in there after patching
+	cp ${WORKDIR}/defconfig-baby ${S}/.config
 }
 
 do_deploy() {
