@@ -33,7 +33,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
 SRC_URI = "https://download.tuxfamily.org/chrony/chrony-${PV}.tar.gz \
     file://chrony.conf \
     file://chronyd \
-    file://arm_eabi.patch \
+    file://arm_eabi.patch;patch=1 \
+    file://dont_try_recvmmsg.patch;patch=1 \
 "
 
 SRC_URI_append_libc-musl = " \
