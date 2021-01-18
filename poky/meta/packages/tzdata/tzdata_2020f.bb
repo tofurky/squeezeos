@@ -32,6 +32,11 @@ do_compile () {
 do_install () {
         install -d ${D}/usr ${D}${datadir}/zoneinfo
         cp -pPR ${S}/usr ${D}/
+	cp -pP "${S}/zone.tab" ${D}${datadir}/zoneinfo
+	cp -pP "${S}/iso3166.tab" ${D}${datadir}/zoneinfo
+	# Install a sane default for timezones
+	install -d ${D}${sysconfdir}
+	ln -s /usr/share/zoneinfo/Factory ${D}${sysconfdir}/localtime
 }
 
 # Packages primarily organized by directory with a major city
@@ -153,4 +158,6 @@ FILES_${PN} += "${datadir}/zoneinfo/Pacific/Honolulu     \
                 ${datadir}/zoneinfo/W-SU                 \
                 ${datadir}/zoneinfo/WET                  \
                 ${datadir}/zoneinfo/Zulu                 \
-                ${datadir}/zoneinfo/Etc/*"
+                ${datadir}/zoneinfo/Etc/*                \
+                ${datadir}/zoneinfo/iso3166.tab          \
+                ${datadir}/zoneinfo/zone.tab"
