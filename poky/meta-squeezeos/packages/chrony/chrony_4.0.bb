@@ -103,24 +103,24 @@ do_install() {
     install -m 644 ${WORKDIR}/chrony.conf ${D}${sysconfdir}
 
     # System V init script
-    install -d ${D}${sysconfdir}/init.d
-    install -m 755 ${WORKDIR}/chronyd ${D}${sysconfdir}/init.d
+    #install -d ${D}${sysconfdir}/init.d
+    #install -m 755 ${WORKDIR}/chronyd ${D}${sysconfdir}/init.d
 
     # systemd unit configuration file
-    install -d ${D}${systemd_unitdir}/system
-    install -m 0644 ${S}/examples/chronyd.service ${D}${systemd_unitdir}/system/
+    #install -d ${D}${systemd_unitdir}/system
+    #install -m 0644 ${S}/examples/chronyd.service ${D}${systemd_unitdir}/system/
 
     # Variable data (for drift and/or rtc file)
-    install -d ${D}${localstatedir}/lib/chrony
+    install -d ${D}${localstatedir}/etc/chrony
 
     # Fix hard-coded paths in config files and init scripts
     sed -i -e 's!/var/!${localstatedir}/!g' -e 's!/etc/!${sysconfdir}/!g' \
            -e 's!/usr/sbin/!${sbindir}/!g' -e 's!/usr/bin/!${bindir}/!g' \
-           ${D}${sysconfdir}/chrony.conf \
-           ${D}${sysconfdir}/init.d/chronyd \
-           ${D}${systemd_unitdir}/system/chronyd.service
-    sed -i 's!^PATH=.*!PATH=${base_sbindir}:${base_bindir}:${sbindir}:${bindir}!' ${D}${sysconfdir}/init.d/chronyd
-    sed -i 's!^EnvironmentFile=.*!EnvironmentFile=-${sysconfdir}/default/chronyd!' ${D}${systemd_unitdir}/system/chronyd.service
+           ${D}${sysconfdir}/chrony.conf
+#           ${D}${sysconfdir}/init.d/chronyd \
+#           ${D}${systemd_unitdir}/system/chronyd.service
+#    sed -i 's!^PATH=.*!PATH=${base_sbindir}:${base_bindir}:${sbindir}:${bindir}!' ${D}${sysconfdir}/init.d/chronyd
+#    sed -i 's!^EnvironmentFile=.*!EnvironmentFile=-${sysconfdir}/default/chronyd!' ${D}${systemd_unitdir}/system/chronyd.service
 }
 
 FILES_${PN} = "${sbindir}/chronyd ${sysconfdir} ${localstatedir}/lib/chrony ${localstatedir}"
