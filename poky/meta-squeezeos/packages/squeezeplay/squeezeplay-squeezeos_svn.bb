@@ -13,6 +13,7 @@ RDEPENDS += " \
 	tzdata-atlantic \
 	tzdata-australia \
 	tzdata-europe \
+	tzdata-misc \
 	tzdata-pacific"
 
 SRC_URI="${SQUEEZEPLAY_SCM};module=squeezeplay_squeezeos"
