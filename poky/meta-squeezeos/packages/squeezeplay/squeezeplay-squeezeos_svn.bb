@@ -5,6 +5,15 @@ PV = "${DISTRO_VERSION}+svnr${SRCREV}"
 PR = "r4"
 
 DEPENDS += "squeezeplay"
+RDEPENDS += " \
+	tzdata \
+	tzdata-africa \
+	tzdata-americas \
+	tzdata-asia \
+	tzdata-atlantic \
+	tzdata-australia \
+	tzdata-europe \
+	tzdata-pacific"
 
 SRC_URI="${SQUEEZEPLAY_SCM};module=squeezeplay_squeezeos"
 
