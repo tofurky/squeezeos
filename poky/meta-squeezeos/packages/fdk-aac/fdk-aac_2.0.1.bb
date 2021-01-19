@@ -14,6 +14,9 @@ inherit autotools
 
 EXTRA_OECONF = "--enable-static=yes --enable-shared=no"
 
+# -flto compile fix
+CFLAGS_append = " -Wno-error=maybe-uninitialized"
+
 do_stage() {
 	autotools_stage_all
 }
