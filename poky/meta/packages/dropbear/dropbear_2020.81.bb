@@ -20,6 +20,9 @@ SBINCOMMANDS = "dropbear dropbearkey dropbearconvert"
 BINCOMMANDS = "dbclient ssh scp"
 EXTRA_OEMAKE = 'MULTI=1 SCPPROGRESS=1 PROGRAMS="${SBINCOMMANDS} ${BINCOMMANDS}"'
 
+# compilation with lto fails
+CFLAGS_append = " -fno-lto"
+
 do_configure_prepend () {
 	cp ${WORKDIR}/localoptions.h .
 }
