@@ -3,4 +3,4 @@ inherit native
 
 PR = "r10"
 
-DEPENDS = "libdbi-perl sqlite3"
+DEPENDS = "libdbi-perl-native sqlite3-native"
