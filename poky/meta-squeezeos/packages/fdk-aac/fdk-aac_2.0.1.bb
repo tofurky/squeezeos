@@ -12,7 +12,7 @@ ARM_INSTRUCTION_SET = "arm"
 
 inherit autotools
 
-EXTRA_OECONF = "--enable-static=yes --enable-shared=no"
+EXTRA_OECONF = "--enable-static=no --enable-shared=yes"
 
 do_stage() {
 	autotools_stage_all
@@ -20,5 +20,4 @@ do_stage() {
 
 PACKAGES += "libfdk-aac"
 
-FILES_libfdk-aac = "${libdir}/libfdk-aac.a"
-#FILES_libfdk-aac = "${libdir}/libfdk-aac.so.*"
+FILES_libfdk-aac = "${libdir}/libfdk-aac.so.*"
