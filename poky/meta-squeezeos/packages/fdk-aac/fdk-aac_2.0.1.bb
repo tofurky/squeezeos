@@ -2,9 +2,9 @@ DESCRIPTION = "The Fraunhofer FDK AAC Codec Library."
 SECTION = "libs"
 LICENSE = "Apache 2.0"
 
-PR="r0"
+PR="r1"
 
-SRC_URI = "http://ralph.irving.sdf.org/squeezeos/${PN}-${PV}-gite7d8591.tar.gz"
+SRC_URI = "${RALPHY_SQUEEZEOS}/${PN}-${PV}-gite7d8591.tar.gz"
 
 S="${WORKDIR}/${PN}-${PV}"
 
