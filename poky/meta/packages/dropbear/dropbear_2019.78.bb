@@ -7,9 +7,11 @@ PROVIDES = "ssh sshd"
 RPROVIDES = "ssh sshd"
 
 SRC_URI = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${PV}.tar.bz2 \
+	file://avoid-passing-null-to-memcpy.patch;patch=1 \
+	file://no-choke-on-disabled-authorized-keys-options.patch;patch=1 \
 	file://localoptions.h"
 
-PR="r3"
+PR="r4"
 
 inherit autotools
 
