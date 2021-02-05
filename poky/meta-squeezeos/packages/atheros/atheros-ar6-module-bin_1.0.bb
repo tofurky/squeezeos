@@ -33,9 +33,9 @@ do_install() {
 	install -m 0644 ${WORKDIR}/ar6000.ko ${INSTALL_DIR}/ar6000.ko
 
 	# tools
-	install -m 0755 ${WORKDIR}/bmiloader ${INSTALL_DIR}/bmiloader
-	install -m 0755 ${WORKDIR}/wmiconfig ${INSTALL_DIR}/wmiconfig
-	install -m 0755 ${WORKDIR}/eeprom.AR6002 ${INSTALL_DIR}/eeprom.AR6002
+	install -s --strip-program=${STRIP} -m 0755 ${WORKDIR}/bmiloader ${INSTALL_DIR}/bmiloader
+	install -s --strip-program=${STRIP} -m 0755 ${WORKDIR}/wmiconfig ${INSTALL_DIR}/wmiconfig
+	install -s --strip-program=${STRIP} -m 0755 ${WORKDIR}/eeprom.AR6002 ${INSTALL_DIR}/eeprom.AR6002
 
 	# firmware
 	install -m 0644 ${WORKDIR}/athwlan.bin ${INSTALL_DIR}/athwlan.bin
