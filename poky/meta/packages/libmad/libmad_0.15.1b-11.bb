@@ -5,15 +5,13 @@ DEPENDS = ""
 LICENSE = "GPL"
 PR = "r0"
 
-SRC_URI = "${RALPHY_SQUEEZEOS}/libmad-${PV}.tar.gz \
-           file://no-force-mem.patch;patch=1 \
-           file://add-pkgconfig.patch;patch=1"
+SRC_URI = "${RALPHY_SQUEEZEOS}/libmad-${PV}.tar.gz"
 
 S = "${WORKDIR}/libmad-${PV}"
 
 inherit autotools pkgconfig
 
-EXTRA_OECONF = "-enable-speed --enable-shared"
+EXTRA_OECONF = "--enable-shared"
 # The ASO's don't take any account of thumb...
 EXTRA_OECONF_append_thumb = " --disable-aso --enable-fpm=default"
 EXTRA_OECONF_append_arm = " --enable-fpm=arm"
