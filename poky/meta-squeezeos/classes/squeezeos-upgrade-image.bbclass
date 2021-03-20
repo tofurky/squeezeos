@@ -45,5 +45,5 @@ addtask squeezeos_image after do_rootfs before do_build
 squeezeos_version() {
 	echo "${DISTRO_RELEASE} r${@squeezeos_squeezeplay_revision(d)}" > ${IMAGE_ROOTFS}/etc/squeezeos.version
 	echo `whoami`@`hostname` `date` >> ${IMAGE_ROOTFS}/etc/squeezeos.version
-	echo "Base build revision: " ${METADATA_REVISION} >> ${IMAGE_ROOTFS}/etc/squeezeos.version
+	echo "Base build revision: " "${METADATA_REVISION}" >> ${IMAGE_ROOTFS}/etc/squeezeos.version
 }
