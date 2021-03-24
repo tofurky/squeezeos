@@ -7,6 +7,6 @@
 # REASSOCIATE, and other wi-fi radio operations.
 
 if [ "$IFACE"x = eth1x ]; then
-	/bin/ip addr flush dev eth1 2>/dev/null
-	/bin/ip link set eth1 up
+	/sbin/ip addr flush dev eth1 2>/dev/null
+	/sbin/ip link set eth1 up
 fi
