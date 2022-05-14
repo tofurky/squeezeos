@@ -3,7 +3,7 @@ HOMEPAGE = "http://www.openssl.org/"
 LICENSE = "openssl"
 SECTION = "libs/network"
 
-SRC_URI = "http://www.openssl.org/source/openssl-${PV}.tar.gz"
+SRC_URI = "https://www.openssl.org/source/openssl-${PV}.tar.gz"
 
 S = "${WORKDIR}/openssl-${PV}"
 
