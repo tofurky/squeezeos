@@ -1,0 +1,28 @@
+--- curl-7.52.1.orig/buildconf	2022-05-12 13:50:20.147104860 -0400
++++ curl-7.52.1/buildconf	2022-05-12 13:49:25.395105101 -0400
+@@ -95,7 +95,7 @@
+ # configure script. Unpatched version 2.68 is simply unusable, we should
+ # disallow 2.68 usage.
+ #
+-need_autoconf="2.57"
++need_autoconf="2.61"
+ ac_version=`${AUTOCONF:-autoconf} --version 2>/dev/null|head -n 1| sed -e 's/^[^0-9]*//' -e 's/[a-z]* *$//'`
+ if test -z "$ac_version"; then
+   echo "buildconf: autoconf not found."
+--- curl-7.52.1.orig/m4/libtool.m4	2016-12-21 17:38:30.000000000 -0500
++++ curl-7.52.1/m4/libtool.m4	2022-05-12 13:55:29.883105117 -0400
+@@ -1,4 +1,4 @@
+-# libtool.m4 - Configure libtool for the host system. -*-Autoconf-*-
++11libtool.m4 - Configure libtool for the host system. -*-Autoconf-*-
+ #
+ #   Copyright (C) 1996-2001, 2003-2015 Free Software Foundation, Inc.
+ #   Written by Gordon Matzigkeit, 1996
+@@ -59,7 +59,7 @@
+ # LT_INIT([OPTIONS])
+ # ------------------
+ AC_DEFUN([LT_INIT],
+-[AC_PREREQ([2.62])dnl We use AC_PATH_PROGS_FEATURE_CHECK
++[AC_PREREQ([2.61])dnl We use AC_PATH_PROGS_FEATURE_CHECK
+ AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+ AC_BEFORE([$0], [LT_LANG])dnl
+ AC_BEFORE([$0], [LT_OUTPUT])dnl
