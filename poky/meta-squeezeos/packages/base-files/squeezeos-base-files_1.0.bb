@@ -3,7 +3,7 @@ SECTION = "base"
 PRIORITY = "required"
 LICENSE = "GPL"
 
-PR = "r130"
+PR = "r131"
 
 SRC_URI = " \
 	file://asound.conf \
@@ -38,6 +38,10 @@ SRC_URI = " \
 	file://zcip_action \
 	file://wpa_action \
 	file://wpa_supplicant.conf \
+	file://dropbear_dss_host_key \
+	file://dropbear_rsa_host_key \
+	file://dropbear_ecdsa_host_key \
+	file://dropbear_ed25519_host_key \
 	file://psall \
 	file://watchdog.conf \
 	file://repair.sh \
