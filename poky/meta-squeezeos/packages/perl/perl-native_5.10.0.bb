@@ -21,8 +21,8 @@ inherit native
 do_configure () {
     ./Configure \
         -Dcc="${CC}" \
-        -Dcflags="${CFLAGS}" \
-        -Dldflags="${LDFLAGS}" \
+        -Dcflags="-Wl,--no-as-needed ${CFLAGS} -lm" \
+        -Dldflags="-Wl,--no-as-needed ${LDFLAGS} -lm" \
         -Dcf_by="Open Embedded" \
         -Dprefix=${prefix} \
         -Dvendorprefix=${prefix} \
