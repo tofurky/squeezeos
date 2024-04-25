@@ -1,0 +1,11 @@
+diff -uNr opkg/libopkg/opkg_error.h opkg.new/libopkg/opkg_error.h
+--- opkg/libopkg/opkg_error.h	2009-09-19 01:52:30.000000000 +0000
++++ opkg.new/libopkg/opkg_error.h	2024-04-25 01:34:33.511137520 +0000
+@@ -51,6 +51,6 @@
+     struct errlist * next;
+ } ;
+ 
+-struct errlist* error_list;
++static struct errlist* error_list;
+ 
+ #endif /* OPKG_ERROR_H */

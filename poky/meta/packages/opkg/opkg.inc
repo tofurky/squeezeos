@@ -14,7 +14,8 @@ PV = "0.0+svnr${SRCREV}"
 SRC_URI = "http://downloads.slimdevices.com/poky-cache/opkg_svn.openmoko.org_.trunk.src.target._4545_.tar.gz \
            file://fix_prototype.patch;patch=1 \
            file://singleton-status.patch;patch=1 \
-           file://opkg-fix-gcc-warnings.patch;patch=1"
+           file://opkg-fix-gcc-warnings.patch;patch=1 \
+           file://error_list_static.patch;patch=1"
 
 S = "${WORKDIR}/opkg"
 
