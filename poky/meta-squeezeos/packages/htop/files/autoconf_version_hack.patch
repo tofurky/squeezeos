@@ -1,0 +1,12 @@
+diff -uNr htop-3.3.0/configure.ac htop-3.3.0.new/configure.ac
+--- htop-3.3.0/configure.ac	2024-01-10 04:54:15.000000000 -0500
++++ htop-3.3.0.new/configure.ac	2024-04-24 23:36:15.779684211 -0400
+@@ -5,7 +5,7 @@
+ # Autoconf initialization.
+ # ----------------------------------------------------------------------
+ 
+-AC_PREREQ([2.69])
++AC_PREREQ([2.65])
+ AC_INIT([htop], [3.3.0], [htop@groups.io], [], [https://htop.dev/])
+ 
+ AC_CONFIG_SRCDIR([htop.c])
