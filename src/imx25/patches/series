@@ -1391,3 +1391,6 @@ logitech/baby-dac-clko-stddrv.patch
 
 logitech/baby-debounce.patch
 logitech/msp430-init-seq.patch
+
+# touches same function as baby-audio-driver.patch
+fixes/prevent-i2s-channel-swap.patch

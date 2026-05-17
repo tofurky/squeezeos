@@ -1,0 +1,197 @@
+diff --git a/sound/soc/imx/imx-ssi.c b/sound/soc/imx/imx-ssi.c
+index c5a5e5575..109b5caa2 100644
+--- a/sound/soc/imx/imx-ssi.c
++++ b/sound/soc/imx/imx-ssi.c
+@@ -27,6 +27,7 @@
+ #include <linux/slab.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/clk.h>
++#include <linux/delay.h>
+ #include <sound/core.h>
+ #include <sound/pcm.h>
+ #include <sound/pcm_params.h>
+@@ -303,7 +304,7 @@ static int imx_ssi_set_dai_fmt(struct snd_soc_dai *cpu_dai, unsigned int fmt)
+ 
+ 	/* sync */
+ 	if (!(fmt & SND_SOC_DAIFMT_ASYNC))
+-		scr |= SSI_SCR_SYN;
++		scr |= SSI_SCR_SYN | SSI_SCR_SYNC_TX_FS;
+ 
+ 	/* tdm - only for stereo atm */
+ 	if (fmt & SND_SOC_DAIFMT_TDM)
+@@ -559,13 +560,37 @@ static int imx_ssi_trigger(struct snd_pcm_substream *substream, int cmd)
+ 	case SNDRV_PCM_TRIGGER_START:
+ 	case SNDRV_PCM_TRIGGER_RESUME:
+ 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+-		/* reset the SSI, this is needed to prevent channel swaps */
+-		if (cpu_dai->id == IMX_DAI_SSI0 || cpu_dai->id == IMX_DAI_SSI1)
+-			SSI1_SCR = 0;
+-		else
+-			SSI2_SCR = 0;
+-
+ 		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
++			int try = 100;
++
++			if (cpu_dai->id == IMX_DAI_SSI0 || cpu_dai->id == IMX_DAI_SSI1) {
++				/* Flush TX FIFO to prevent stale data from causing swaps */
++				SSI1_SOR |= SSI_SOR_TX_CLR;
++				/* Enable SSI block first to trigger SDMA requests */
++				SSI1_SCR |= SSI_SCR_SSIEN;
++			} else {
++				/* Flush TX FIFO to prevent stale data from causing swaps */
++				SSI2_SOR |= SSI_SOR_TX_CLR;
++				/* Enable SSI block first to trigger SDMA requests */
++				SSI2_SCR |= SSI_SCR_SSIEN;
++			}
++
++			/* Wait for DMA to fill the FIFO. If we enable the transmitter (TE)
++			 * before the FIFO has data, the hardware might start shifting
++			 * on the wrong Frame Sync phase.
++			 */
++			while (try--) {
++				/* Check Transmit FIFO0 Counter (TFCNT0) in SFCSR */
++				u32 sfcsr = (cpu_dai->id == IMX_DAI_SSI0 || cpu_dai->id == IMX_DAI_SSI1) ? SSI1_SFCSR : SSI2_SFCSR;
++				if (sfcsr & SSI_SFCSR_TFCNT0_MASK)
++					break;
++				udelay(10);
++			}
++
++			/* Now that FIFO has data, enable the Transmitter.
++			 * Combined with SSI_SCR_SYNC_TX_FS, this ensures we start
++			 * perfectly aligned with the next Frame Sync transition.
++			 */
+ 			scr |= SSI_SCR_TE;
+ 		} else
+ 			scr |= SSI_SCR_RE;
+@@ -719,23 +744,82 @@ const char imx_ssi_4[SND_SOC_DAI_NAME_SIZE] = {
+ 
+ EXPORT_SYMBOL_GPL(imx_ssi_4);
+ 
+-static int fifo_err_counter;
++static int ssi1_err_counter;
++static int ssi2_err_counter;
+ 
+ static irqreturn_t ssi1_irq(int irq, void *dev_id)
+ {
+-	if (fifo_err_counter++ % 1 == 0)
+-		printk(KERN_ERR "ssi1_irq SISR %x SIER %x fifo_errs=%d\n",
+-		       SSI1_SISR, SSI1_SIER, fifo_err_counter);
+-	SSI1_SISR = SSI_SIER_TUE0_EN | SSI_SIER_ROE0_EN;
++	u32 sisr = SSI1_SISR;
++
++	if (sisr & (SSI_SISR_TUE0 | SSI_SISR_TUE1)) {
++		int try = 1000; /* 1ms max wait */
++
++		/* Transmit underrun - toggle TE to re-sync Frame Sync. */
++		SSI1_SCR &= ~SSI_SCR_TE;
++		
++		/* Give the hardware a moment to settle and then flush the dirty FIFO */
++		udelay(10);
++		SSI1_SOR |= SSI_SOR_TX_CLR;
++
++		/* We MUST wait for DMA to deliver fresh data before re-enabling TE.
++		 * If we don't, the transmitter starts on an empty FIFO and
++		 * immediately shifts phase again.
++		 */
++		while (try--) {
++			if (SSI1_SFCSR & SSI_SFCSR_TFCNT0_MASK)
++				break;
++			udelay(1);
++		}
++
++		/* Re-enable. Combined with SYNC_TX_FS, this snaps to the next FS */
++		SSI1_SCR |= SSI_SCR_TE;
++
++		if (ssi1_err_counter++ % 1 == 0)
++			printk(KERN_ERR "ssi1 underrun: re-synced channels (wait=%dus, total=%d)\n", 
++			       1000 - try, ssi1_err_counter);
++	}
++
++	if (sisr & (SSI_SISR_ROE0 | SSI_SISR_ROE1)) {
++		SSI1_SCR &= ~SSI_SCR_RE;
++		SSI1_SOR |= SSI_SOR_RX_CLR;
++		SSI1_SCR |= SSI_SCR_RE;
++	}
++
++	SSI1_SISR = sisr;
+ 	return IRQ_HANDLED;
+ }
+ 
+ static irqreturn_t ssi2_irq(int irq, void *dev_id)
+ {
+-	if (fifo_err_counter++ % 1000 == 0)
+-		printk(KERN_ERR "ssi2_irq SISR %x SIER %x fifo_errs=%d\n",
+-		       SSI2_SISR, SSI2_SIER, fifo_err_counter);
+-	SSI2_SISR = SSI_SIER_TUE0_EN | SSI_SIER_ROE0_EN;
++	u32 sisr = SSI2_SISR;
++
++	if (sisr & (SSI_SISR_TUE0 | SSI_SISR_TUE1)) {
++		int try = 1000;
++
++		SSI2_SCR &= ~SSI_SCR_TE;
++		udelay(10);
++		SSI2_SOR |= SSI_SOR_TX_CLR;
++
++		while (try--) {
++			if (SSI2_SFCSR & SSI_SFCSR_TFCNT0_MASK)
++				break;
++			udelay(1);
++		}
++
++		SSI2_SCR |= SSI_SCR_TE;
++
++		if (ssi2_err_counter++ % 1 == 0)
++			printk(KERN_ERR "ssi2 underrun: re-synced channels (wait=%dus, total=%d)\n", 
++			       1000 - try, ssi2_err_counter);
++	}
++
++	if (sisr & (SSI_SISR_ROE0 | SSI_SISR_ROE1)) {
++		SSI2_SCR &= ~SSI_SCR_RE;
++		SSI2_SOR |= SSI_SOR_RX_CLR;
++		SSI2_SCR |= SSI_SCR_RE;
++	}
++
++	SSI2_SISR = sisr;
+ 	return IRQ_HANDLED;
+ }
+ 
+diff --git a/sound/soc/imx/imx-ssi.h b/sound/soc/imx/imx-ssi.h
+index 6640fad54..fc4b240b0 100644
+--- a/sound/soc/imx/imx-ssi.h
++++ b/sound/soc/imx/imx-ssi.h
+@@ -67,6 +67,7 @@
+ #define SSI_SCR_TE             (1 << 1)
+ #define SSI_SCR_SSIEN          (1 << 0)
+ #define SSI_SCR_I2S_MODE_MASK  (3 << 5)
++#define SSI_SCR_SYNC_TX_FS     (1 << 12)
+ 
+ #define SSI_SISR_CMDAU         (1 << 18)
+ #define SSI_SISR_CMDDU         (1 << 17)
+@@ -153,6 +154,15 @@
+ #define SSI_SRCCR_PM_MASK        (0xff << 0)
+ 
+ 
++#define SSI_SFCSR_RFCNT1_MASK (0xf << 28)
++#define SSI_SFCSR_TFCNT1_MASK (0xf << 24)
++#define SSI_SFCSR_RFWM1_MASK  (0xf << 20)
++#define SSI_SFCSR_TFWM1_MASK  (0xf << 16)
++#define SSI_SFCSR_RFCNT0_MASK (0xf << 12)
++#define SSI_SFCSR_TFCNT0_MASK (0xf <<  8)
++#define SSI_SFCSR_RFWM0_MASK  (0xf <<  4)
++#define SSI_SFCSR_TFWM0_MASK  (0xf <<  0)
++
+ #define SSI_SFCSR_RFCNT1(x)   (((x) & 0xf) << 28)
+ #define SSI_SFCSR_TFCNT1(x)   (((x) & 0xf) << 24)
+ #define SSI_SFCSR_RFWM1(x)    (((x) & 0xf) << 20)
+@@ -186,9 +196,9 @@
+ #define SSI_SACNT_AC97EN      (x << 0)
+ 
+ /* SDMA & SSI watermarks for FIFO's */
+-#define SDMA_TXFIFO_WATERMARK				0x4
++#define SDMA_TXFIFO_WATERMARK				0x8
+ #define SDMA_RXFIFO_WATERMARK				0x6
+-#define SSI_TXFIFO_WATERMARK				0x4
++#define SSI_TXFIFO_WATERMARK				0x8
+ #define SSI_RXFIFO_WATERMARK				0x6
+ 
+ /* i.MX DAI SSP ID's */
