@@ -1,0 +1,12 @@
+diff -uNr dropbear-2026.91/configure.ac dropbear-2026.91.new/configure.ac
+--- dropbear-2026.91/configure.ac	2026-05-17 16:58:57.226823665 -0400
++++ dropbear-2026.91.new/configure.ac	2026-05-10 10:30:00.000000000 -0400
+@@ -5,7 +5,7 @@
+ # of the platform checks have been taken straight from OpenSSH's configure.ac
+ # Huge thanks to them for dealing with the horrible platform-specifics :)
+ 
+-AC_PREREQ([2.70])
++AC_PREREQ([2.65])
+ AC_INIT
+ 
+ ORIGCFLAGS="$CFLAGS"
