@@ -1,0 +1,19 @@
+diff -uNr busybox-1.32.1/networking/ifupdown.c busybox-1.32.1.new/networking/ifupdown.c
+--- busybox-1.32.1/networking/ifupdown.c	2021-01-01 08:30:02.000000000 -0500
++++ busybox-1.32.1.new/networking/ifupdown.c	2021-01-08 21:29:04.746755692 -0500
+@@ -289,6 +289,15 @@
+ 			return ifd->option[i].value;
+ 		}
+ 	}
++
++	/* gethostname if it is not in the interface definition */
++	if (strncmpz(id, "hostname", idlen) == 0) {
++		static char hostname[HOST_NAME_MAX + 1];
++		if (gethostname(hostname, HOST_NAME_MAX) == 0) {
++			return hostname;
++		}
++	}
++
+ 	return NULL;
+ }
+ 
