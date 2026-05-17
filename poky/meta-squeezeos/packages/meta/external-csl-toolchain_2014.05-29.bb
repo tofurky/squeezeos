@@ -15,7 +15,7 @@ PROVIDES = "\
 	virtual/linux-libc-headers "
 RPROVIDES = "glibc-utils libsegfault glibc-thread-db"
 PACKAGES_DYNAMIC = "glibc-gconv-* locale-binary-*"
-PR = "r0"
+PR = "r1"
 
 SRC_URI = "http://sources.buildroot.net/toolchain-external-codesourcery-arm/arm-${PV}-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 \
 	file://SUPPORTED"
@@ -41,6 +41,9 @@ do_install() {
 	cp -a ${CROSS_DIR}/arm-none-linux-gnueabi/libc/etc/*  ${D}${sysconfdir}
 	cp -a ${CROSS_DIR}/arm-none-linux-gnueabi/libc/sbin/* ${D}${base_sbindir}
 	cp -a ${CROSS_DIR}/arm-none-linux-gnueabi/libc/usr/*  ${D}/usr
+
+	# ~100KB of cruft; see https://github.com/ralph-irving/squeezeos/commit/bbe4aac82552ade38e651c4a5abf1e690ddcfa4e
+	rm -r ${D}/usr/libexec/getconf
 }
 
 do_stage() {
