@@ -11,4 +11,5 @@ tape:x:26:
 audio:x:29:
 video:x:44:
 plugdev:x:46:
+nobody:x:65534:
 users:x:100:
